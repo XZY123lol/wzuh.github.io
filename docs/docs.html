@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wzuh Documentation</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+  />
   <style>
     :root {
       --bg-light: #f9f9f9;
@@ -19,6 +22,7 @@
       background: var(--bg-light);
       color: var(--text-light);
       display: flex;
+      min-height: 100vh;
     }
     aside {
       width: 240px;
@@ -29,9 +33,22 @@
       overflow-y: auto;
       transition: transform 0.3s ease;
       z-index: 1000;
+      left: 0;
+      top: 0;
+      transform: translateX(0);
     }
-    aside.hidden {
-      transform: translateX(-100%);
+    /* Класс для скрытия меню */
+    aside.hidden,
+    @media (max-width: 768px) {
+      aside {
+        transform: translateX(-100%);
+      }
+      aside.show {
+        transform: translateX(0);
+      }
+      main {
+        margin-left: 0 !important;
+      }
     }
     .menu-toggle {
       position: fixed;
@@ -50,6 +67,8 @@
       height: 100px;
       margin: 0 auto 1rem;
       display: block;
+      border-radius: 50%;
+      object-fit: cover;
     }
     main {
       margin-left: 260px;
@@ -57,10 +76,8 @@
       flex: 1;
       transition: margin-left 0.3s ease;
     }
-    .collapsed main {
-      margin-left: 20px;
-    }
-    h1, h2 {
+    h1,
+    h2 {
       color: var(--highlight);
     }
     .code-box {
@@ -108,27 +125,23 @@
       font-size: 1rem;
       border: 1px solid #ccc;
     }
-    @media (max-width: 768px) {
-      aside {
-        transform: translateX(-100%);
-      }
-      aside.show {
-        transform: translateX(0);
-      }
-      main {
-        margin-left: 0;
-      }
-    }
   </style>
 </head>
 <body>
-  <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  <button class="menu-toggle" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+  </button>
   <button class="toggle-theme">Toggle Theme</button>
-  <div class="sidebar-toggle">
-    <img src="https://i.postimg.cc/TPTbdfkM/Utool-20250518-154454559.png" alt="Compiler Avatar" style="width: 32px; height: 32px; border-radius: 50%; vertical-align: middle;">
+
+  <aside id="sidebar">
+    <img
+      src="https://i.postimg.cc/TPTbdfkM/Utool-20250518-154454559.png"
+      alt="Compiler Avatar"
+      class="avatar"
+    />
     <h2>Wzuh Docs</h2>
     <div class="search">
-      <input type="text" placeholder="Search..." oninput="searchDocs(this.value)">
+      <input type="text" placeholder="Search..." oninput="searchDocs(this.value)" />
     </div>
     <ul>
       <li><a href="#basic" onclick="closeMenu()">Basic Syntax</a></li>
@@ -142,6 +155,7 @@
       <option>Español</option>
     </select>
   </aside>
+
   <main>
     <h1 id="basic">Basic Syntax</h1>
     <p><code>set</code>: Assign value to variable.</p>
@@ -182,43 +196,42 @@
       const code = btn.nextElementSibling.innerText;
       navigator.clipboard.writeText(code);
       btn.innerText = "Copied!";
-      setTimeout(() => btn.innerText = "Copy", 2000);
+      setTimeout(() => (btn.innerText = "Copy"), 2000);
     }
 
-    document.querySelector('.toggle-theme').onclick = () => {
+    document.querySelector(".toggle-theme").onclick = () => {
       const root = document.documentElement;
-      const isLight = root.style.getPropertyValue('--bg-light') === '#f9f9f9';
+      const isLight = root.style.getPropertyValue("--bg-light") === "#f9f9f9" || !root.style.getPropertyValue("--bg-light");
       if (isLight) {
-        root.style.setProperty('--bg-light', '#1e1e1e');
-        root.style.setProperty('--text-light', '#f1f1f1');
+        root.style.setProperty("--bg-light", "#1e1e1e");
+        root.style.setProperty("--text-light", "#f1f1f1");
       } else {
-        root.style.setProperty('--bg-light', '#f9f9f9');
-        root.style.setProperty('--text-light', '#1e1e1e');
+        root.style.setProperty("--bg-light", "#f9f9f9");
+        root.style.setProperty("--text-light", "#1e1e1e");
       }
-      document.body.style.background = getComputedStyle(root).getPropertyValue('--bg-light');
-      document.body.style.color = getComputedStyle(root).getPropertyValue('--text-light');
+      document.body.style.background = getComputedStyle(root).getPropertyValue("--bg-light");
+      document.body.style.color = getComputedStyle(root).getPropertyValue("--text-light");
     };
 
     function searchDocs(query) {
       query = query.toLowerCase();
       const sections = document.querySelectorAll("main h1, main p, main .code-box");
-      sections.forEach(sec => {
+      sections.forEach((sec) => {
         sec.style.display = sec.textContent.toLowerCase().includes(query) ? "block" : "none";
       });
     }
 
     function toggleMenu() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('show');
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("show");
     }
 
     function closeMenu() {
-      const sidebar = document.getElementById('sidebar');
+      const sidebar = document.getElementById("sidebar");
       if (window.innerWidth <= 768) {
-        sidebar.classList.remove('show');
+        sidebar.classList.remove("show");
       }
     }
   </script>
 </body>
-  </html>
-  
+</html>
